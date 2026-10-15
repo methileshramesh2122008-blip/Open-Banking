@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TrustMesh ConsentGuard — Open Banking API Security & Change-Impact Engine</title>
+  <meta name="description" content="TrustMesh ConsentGuard adds an intelligent, consent-aware security layer between banking APIs and fintech partners, with automated API change-impact testing.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Ambient cyber background glow -->
+  <div class="ambient-bg" aria-hidden="true"></div>
+
+  <!-- Main Top Header -->
+  <header class="app-header">
+    <div class="brand-wrapper">
+      <div class="brand-logo" aria-label="TrustMesh Logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <path d="M9 12l2 2 4-4"/>
+        </svg>
+      </div>
+      <div class="brand-info">
+        <h1>
+          TrustMesh ConsentGuard
+          <span class="badge-tag">Open Banking Core</span>
+        </h1>
+        <div class="brand-subtitle">Consent-Aware Access Control &amp; Automated API Change-Impact Engine</div>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <div class="system-status-indicator" id="system-health-pill">
+        <span class="pulse-dot"></span>
+        <span>Gateway Enforcing (Zero-Knowledge)</span>
+      </div>
+      <button class="btn-secondary" id="btn-export-audit" title="Download Tamper-Evident Audit Trail">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export Audit
+      </button>
+      <button class="btn-primary" id="btn-new-consent">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Grant Consent
+      </button>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs Bar -->
+  <nav class="nav-tabs-bar" aria-label="Module Navigation">
+    <button class="nav-tab-btn active" data-tab="tab-playground" id="nav-btn-playground">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      Live Security Playground
+      <span class="tab-badge">Demo</span>
+    </button>
+    <button class="nav-tab-btn" data-tab="tab-innovation" id="nav-btn-innovation">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      API Change-Impact Tester
+      <span class="tab-badge highlight">Key Innovation</span>
+    </button>
+    <button class="nav-tab-btn" data-tab="tab-algorithm" id="nav-btn-algorithm">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+      Algorithm &amp; Pipeline
+    </button>
+    <button class="nav-tab-btn" data-tab="tab-consents" id="nav-btn-consents">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7.5" r="4"/><polyline points="17 11 19 13 23 9"/></svg>
+      Customer Consent Vault
+    </button>
+    <button class="nav-tab-btn" data-tab="tab-partners" id="nav-btn-partners">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+      Fintech Partner Registry
+    </button>
+    <button class="nav-tab-btn" data-tab="tab-audit" id="nav-btn-audit">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      Audit Ledger
+      <span class="tab-badge" id="audit-badge-count">Live</span>
+    </button>
+    <button class="nav-tab-btn" data-tab="tab-architecture" id="nav-btn-architecture">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+      Architecture
+    </button>
+  </nav>
+
+  <!-- Main Body Content -->
+  <main class="main-content">
+
+    <!-- ====================================================================
+         TAB 1: LIVE SECURITY PLAYGROUND (HACKATHON DEMO)
+         ==================================================================== -->
+    <section class="tab-section active" id="tab-playground">
+      <!-- Quick Scenario Preset Bar -->
+      <div class="scenario-presets-bar">
+        <span class="preset-label">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          Judge Presets:
+        </span>
+        <div class="preset-chip-group">
+          <button class="preset-chip active" data-preset="ALLOW_ACCOUNT_A">
+            ✓ Allow: Account A Balance (₹40,000)
+          </button>
+          <button class="preset-chip" data-preset="DENY_ACCOUNT_B">
+            ✕ Deny: Account B (Unconsented Account)
+          </button>
+          <button class="preset-chip" data-preset="DENY_TRANSACTIONS">
+            ✕ Deny: Transactions (Unconsented Scope)
+          </button>
+          <button class="preset-chip" data-preset="DENY_REVOKED">
+            ✕ Deny: Consent Revoked
+          </button>
+          <button class="preset-chip" data-preset="DENY_EXPIRED">
+            ✕ Deny: Consent Expired
+          </button>
+          <button class="preset-chip" data-preset="DENY_INVALID_AUTH">
+            ✕ Deny: Invalid Partner Auth
+          </button>
+          <button class="preset-chip" data-preset="DENY_RATE_LIMIT">
+            ✕ Deny: Rate Limit Breached
+          </button>
+        </div>
+      </div>
+
+      <!-- Playground Layout Grid -->
+      <div class="grid-playground">
+        <!-- Left Column: Test Case Matrix Controls -->
+        <div class="glass-panel" id="playground-config-panel">
+          <div class="section-header" style="margin-bottom: 1.2rem;">
+            <div class="section-title-wrap">
+              <h2 style="font-size: 1.2rem;">Security Decision Matrix</h2>
+              <p>Configure test conditions to verify the TrustMesh ConsentGuard pipeline.</p>
+            </div>
+          </div>
+
+          <!-- Customer Context Callout -->
+          <div class="customer-context-box">
+            <div class="box-title">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span>Customer Context: Priya Sharma (ID: <code>CUST-884920</code>)</span>
+            </div>
+            <div class="accounts-list">
+              <div>• <strong>Account A (Savings):</strong> ₹40,000.00 — <span class="text-cyan">Consented to LendKart Pro</span></div>
+              <div>• <strong>Account B (Current):</strong> ₹30,000.00 — <span class="text-rose">Restricted / Non-Consented</span></div>
+              <div>• <strong>Requesting Partner:</strong> LendKart Pro Fintech (ID: <code>PARTNER-LENDKART</code>)</div>
+            </div>
+          </div>
+
+          <!-- 1. Customer Consent Condition -->
+          <div class="config-group" style="margin-top: 1.2rem;">
+            <div class="config-label">
+              <span>1. Customer Consent Condition</span>
+              <span class="text-cyan">Auth &amp; Status</span>
+            </div>
+            <div class="config-options">
+              <button class="config-btn selected" data-condition="ACTIVE" id="btn-cond-active">
+                <div>
+                  <strong>Active Consent with Valid Auth</strong>
+                  <div style="font-size:0.72rem; color:var(--text-muted);">Active consent record exists and partner credentials valid</div>
+                </div>
+                <div class="config-btn-indicator"></div>
+              </button>
+
+              <button class="config-btn" data-condition="REVOKED" id="btn-cond-revoked">
+                <div>
+                  <strong>Customer has Revoked Consent</strong>
+                  <div style="font-size:0.72rem; color:var(--text-muted);">Customer explicitly toggled consent to REVOKED status</div>
+                </div>
+                <div class="config-btn-indicator"></div>
+              </button>
+
+              <button class="config-btn" data-condition="EXPIRED" id="btn-cond-expired">
+                <div>
+                  <strong>Consent has Expired</strong>
+                  <div style="font-size:0.72rem; color:var(--text-muted);">Consent validity end timestamp is in the past</div>
+                </div>
+                <div class="config-btn-indicator"></div>
+              </button>
+
+              <button class="config-btn" data-condition="INVALID_AUTH" id="btn-cond-invalid-auth">
+                <div>
+                  <strong>Invalid Partner Authentication</strong>
+                  <div style="font-size:0.72rem; color:var(--text-muted);">Partner token or cryptographic signature verification fails</div>
+                </div>
+                <div class="config-btn-indicator"></div>
+              </button>
+            </div>
+          </div>
+
+          <!-- 2. Requested Account -->
+          <div class="config-group">
+            <div class="config-label">
+              <span>2. Requested Account</span>
+              <span class="text-cyan">Resource Boundary</span>
+            </div>
+            <div class="btn-row">
+              <button class="config-btn selected" data-account="ACC-IND-4001" id="btn-acc-a">
+                <div>
+                  <strong>Account A</strong>
+                  <div class="account-meta">₹40,000 (Savings)</div>
+                </div>
+                <div class="config-btn-indicator"></div>
+              </button>
+
+              <button class="config-btn" data-account="ACC-IND-3002" id="btn-acc-b">
+                <div>
+                  <strong>Account B</strong>
+                  <div class="account-meta">₹30,000 (Current)</div>
+                </div>
+                <div class="config-btn-indicator"></div>
+              </button>
+            </div>
+          </div>
+
+          <!-- 3. Requested Permission Scope -->
+          <div class="config-group">
+            <div class="config-label">
+              <span>3. Requested Permission</span>
+              <span class="text-cyan">Operation Scope</span>
+            </div>
+            <div class="btn-row">
+              <button class="config-btn selected" data-permission="read:balance" id="btn-perm-balance">
+                <div>
+                  <strong>Read Balance</strong>
+                  <div style="font-size:0.7rem; color:var(--text-muted);"><code>read:balance</code></div>
+                </div>
+                <div class="config-btn-indicator"></div>
+              </button>
+
+              <button class="config-btn" data-permission="read:transactions" id="btn-perm-transactions">
+                <div>
+                  <strong>Read Transactions</strong>
+                  <div style="font-size:0.7rem; color:var(--text-muted);"><code>read:transactions</code></div>
+                </div>
+                <div class="config-btn-indicator"></div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Execute Button -->
+          <button class="btn-execute-guard" id="btn-execute-guard">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Execute Security Decision Pipeline
+          </button>
+        </div>
+
+        <!-- Right Column: Visual Pipeline & Decision Banner -->
+        <div>
+          <!-- Decision Hero Banner -->
+          <div class="decision-hero-banner allow" id="decision-hero-banner">
+            <div class="decision-content-left">
+              <div class="decision-icon-large" id="hero-decision-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              </div>
+              <div class="decision-text-group">
+                <h3 id="hero-decision-text">ALLOW REQUEST</h3>
+                <p id="hero-decision-desc">The partner is authenticated, consent is active, and the requested balance is within the granted scope.</p>
+              </div>
+            </div>
+            <div class="reason-code-tag" id="hero-reason-code">
+              ALLOW: AUTHORIZED_CONSENT_GRANTED
+            </div>
+          </div>
+
+          <!-- 7-Step Evaluation Stepper Visualizer -->
+          <div class="glass-panel" style="margin-bottom: 1.5rem;">
+            <div class="section-header" style="margin-bottom: 1rem;">
+              <div class="section-title-wrap">
+                <h3 style="font-size: 1.05rem; font-weight: 700; color: #fff;">Pipeline Step-by-Step Execution</h3>
+                <p style="font-size: 0.78rem;">Live execution trace of each security layer checkpoint.</p>
+              </div>
+              <span class="badge-tag">Fail-Closed Architecture</span>
+            </div>
+
+            <div class="pipeline-container" id="pipeline-steps-wrapper">
+              <!-- Step 1 -->
+              <div class="pipeline-step-card pass" id="step-card-1">
+                <div class="step-info-col">
+                  <div class="step-number-badge">1</div>
+                  <div class="step-text">
+                    <h4>Step 1: Third-Party Partner Authentication</h4>
+                    <p>Verify partner identity, mTLS certs, and partner token.</p>
+                  </div>
+                </div>
+                <div class="step-status-col">
+                  <span class="step-latency">12ms</span>
+                  <span class="status-badge pass">PASSED</span>
+                </div>
+              </div>
+
+              <!-- Step 2 -->
+              <div class="pipeline-step-card pass" id="step-card-2">
+                <div class="step-info-col">
+                  <div class="step-number-badge">2</div>
+                  <div class="step-text">
+                    <h4>Step 2: Access Token Validation</h4>
+                    <p>Cryptographic JWT signature, issuer, and expiry check.</p>
+                  </div>
+                </div>
+                <div class="step-status-col">
+                  <span class="step-latency">15ms</span>
+                  <span class="status-badge pass">PASSED</span>
+                </div>
+              </div>
+
+              <!-- Step 3 -->
+              <div class="pipeline-step-card pass" id="step-card-3">
+                <div class="step-info-col">
+                  <div class="step-number-badge">3</div>
+                  <div class="step-text">
+                    <h4>Step 3: Customer Consent Verification</h4>
+                    <p>Confirm active, unrevoked consent agreement exists in ledger.</p>
+                  </div>
+                </div>
+                <div class="step-status-col">
+                  <span class="step-latency">18ms</span>
+                  <span class="status-badge pass">PASSED</span>
+                </div>
+              </div>
+
+              <!-- Step 4 -->
+              <div class="pipeline-step-card pass" id="step-card-4">
+                <div class="step-info-col">
+                  <div class="step-number-badge">4</div>
+                  <div class="step-text">
+                    <h4>Step 4: Permission &amp; Resource Policy Check</h4>
+                    <p>Verify requested account, operation scope, and field permissions.</p>
+                  </div>
+                </div>
+                <div class="step-status-col">
+                  <span class="step-latency">14ms</span>
+                  <span class="status-badge pass">PASSED</span>
+                </div>
+              </div>
+
+              <!-- Step 5 -->
+              <div class="pipeline-step-card pass" id="step-card-5">
+                <div class="step-info-col">
+                  <div class="step-number-badge">5</div>
+                  <div class="step-text">
+                    <h4>Step 5: Purpose &amp; Consent Expiry Check</h4>
+                    <p>Validate intended purpose matches customer authorization.</p>
+                  </div>
+                </div>
+                <div class="step-status-col">
+                  <span class="step-latency">11ms</span>
+                  <span class="status-badge pass">PASSED</span>
+                </div>
+              </div>
+
+              <!-- Step 6 -->
+              <div class="pipeline-step-card pass" id="step-card-6">
+                <div class="step-info-col">
+                  <div class="step-number-badge">6</div>
+                  <div class="step-text">
+                    <h4>Step 6: API Security Policies &amp; Rate Limits</h4>
+                    <p>Verify partner rate limits (rpm) and API version compatibility.</p>
+                  </div>
+                </div>
+                <div class="step-status-col">
+                  <span class="step-latency">9ms</span>
+                  <span class="status-badge pass">PASSED</span>
+                </div>
+              </div>
+
+              <!-- Step 7 -->
+              <div class="pipeline-step-card pass" id="step-card-7">
+                <div class="step-info-col">
+                  <div class="step-number-badge">7</div>
+                  <div class="step-text">
+                    <h4>Step 7: Banking API Forwarding &amp; Secure Response</h4>
+                    <p>Return only consented data or return safe error with zero leaks.</p>
+                  </div>
+                </div>
+                <div class="step-status-col">
+                  <span class="step-latency">22ms</span>
+                  <span class="status-badge pass">PASSED</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Response Inspector -->
+          <div class="glass-panel">
+            <div class="payload-tabs-header">
+              <button class="payload-tab active" data-view="body" id="tab-payload-body">HTTP Response Payload</button>
+              <button class="payload-tab" data-view="headers" id="tab-payload-headers">Security Headers</button>
+              <button class="payload-tab" data-view="audit" id="tab-payload-audit">Audit Ledger Block</button>
+            </div>
+
+            <div class="code-viewer-container" id="json-response-viewer">
+              <!-- Dynamically populated -->
+            </div>
+
+            <!-- Zero-Leak Shield Guarantee -->
+            <div class="zero-leak-shield success" id="zero-leak-callout">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <strong>Consent-Bound Response:</strong> Returned authorized fields for Account A (Balance: ₹40,000). Sensitive and non-consented accounts strictly protected.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         TAB 2: KEY INNOVATION: AUTOMATED API CHANGE-IMPACT TESTER
+         ==================================================================== -->
+    <section class="tab-section" id="tab-innovation">
+      <div class="innovation-banner">
+        <div class="innovation-text">
+          <h3>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            Key Innovation: Consent-Aware API Change-Impact Tester
+          </h3>
+          <p>
+            When an API schema, consent rule, or authorization scope changes, ConsentGuard runs automated pre-deployment simulations across all registered fintech partners and active customer consent agreements to proactively identify broken integrations and compliance breaches.
+          </p>
+        </div>
+        <button class="btn-primary" id="btn-run-impact-test" style="white-space: nowrap;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Run Impact Simulation
+        </button>
+      </div>
+
+      <!-- Real-Time Impact Metric Cards -->
+      <div class="impact-metric-cards">
+        <div class="metric-card danger">
+          <div class="metric-val" id="metric-breaking-count">2</div>
+          <div class="metric-lbl">Breaking Integrations</div>
+        </div>
+        <div class="metric-card warning">
+          <div class="metric-val" id="metric-consents-at-risk">18</div>
+          <div class="metric-lbl">At-Risk Customer Consents</div>
+        </div>
+        <div class="metric-card info">
+          <div class="metric-val" id="metric-partners-affected">2</div>
+          <div class="metric-lbl">Fintech Partners Affected</div>
+        </div>
+        <div class="metric-card success">
+          <div class="metric-val" id="metric-consents-scanned">24</div>
+          <div class="metric-lbl">Total Consents Scanned</div>
+        </div>
+      </div>
+
+      <!-- Scenario Selector and Diff View -->
+      <div class="glass-panel" style="margin-bottom: 2rem;">
+        <div class="section-header">
+          <div class="section-title-wrap">
+            <h3 style="font-size: 1.15rem; color: #fff;">Select API Evolution / Policy Mutation Scenario</h3>
+            <p>Evaluate backwards compatibility against live open banking traffic.</p>
+          </div>
+          <select class="form-control" id="impact-scenario-select" style="max-width: 480px;">
+            <option value="SCN-BREAKING-SCHEMA">Scenario 1: Deprecate `account_balance` in favor of `available_balance` (Breaking Schema)</option>
+            <option value="SCN-SCOPE-ESCALATION">Scenario 2: Require `accounts:detail:v2` scope instead of legacy `read:balance`</option>
+            <option value="SCN-POLICY-WINDOW">Scenario 3: Shorten Maximum Consent Window from 180 to 90 Days (Compliance)</option>
+            <option value="SCN-PII-REDACTION">Scenario 4: Field-Level PII Redaction on Transaction Narration (Privacy)</option>
+          </select>
+        </div>
+
+        <div style="margin-bottom: 1.25rem;">
+          <h4 id="scenario-title" style="font-size: 1.05rem; color: #fff; margin-bottom: 0.35rem;">Scenario 1: Deprecate `account_balance` field in favor of `available_balance`</h4>
+          <p id="scenario-desc" style="font-size: 0.85rem; color: var(--text-secondary);">Core Banking Gateway API v2.5 renames legacy field `balance` to `ledger_balance` and `available_balance`. Third parties relying on `balance` will crash.</p>
+          <div style="margin-top: 0.6rem;">
+            <span class="badge-tag text-rose" id="scenario-severity-badge">SEVERITY: HIGH</span>
+          </div>
+        </div>
+
+        <!-- Schema Diff Viewer -->
+        <div class="diff-container">
+          <div class="diff-panel">
+            <div class="diff-header">
+              <span>Legacy API Contract (Current)</span>
+              <span class="text-muted">v2.4 LTS</span>
+            </div>
+            <pre class="mono-col" id="diff-before" style="font-size: 0.8rem; line-height: 1.6;"></pre>
+          </div>
+
+          <div class="diff-panel">
+            <div class="diff-header">
+              <span>Proposed API Contract (Target)</span>
+              <span class="text-cyan">v2.5 Candidate</span>
+            </div>
+            <pre class="mono-col" id="diff-after" style="font-size: 0.8rem; line-height: 1.6;"></pre>
+          </div>
+        </div>
+
+        <!-- Simulation Results Callout -->
+        <div id="simulation-results-box" style="background: rgba(244, 63, 94, 0.08); border: 1px solid rgba(244, 63, 94, 0.3); border-radius: var(--radius-md); padding: 1.25rem;">
+          <h4 style="color: #fb7185; font-size: 0.95rem; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.5rem;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Pre-Deployment Impact Analysis Report
+          </h4>
+          <p id="sim-summary-text" style="font-size: 0.85rem; color: #f8fafc; margin-bottom: 0.6rem;"></p>
+          <div style="font-size: 0.8rem; color: var(--text-secondary);">
+            <strong>Affected Partners:</strong> <span id="sim-partners-list" class="text-cyan"></span>
+          </div>
+          <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.25rem;">
+            <strong>Automated Mitigation Strategy:</strong> <code id="sim-remediation-code" class="mono-col" style="background: rgba(0,0,0,0.4); padding: 2px 6px; border-radius: 4px;"></code>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         TAB 3: ALGORITHM & PIPELINE DOCUMENTATION
+         ==================================================================== -->
+    <section class="tab-section" id="tab-algorithm">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <h2>TrustMesh ConsentGuard Algorithm</h2>
+          <p>Step-by-step logic determining whether banking data access should be allowed or blocked.</p>
+        </div>
+      </div>
+
+      <div class="grid-2col">
+        <!-- Python Reference Code Card -->
+        <div class="glass-panel">
+          <div class="section-header" style="margin-bottom: 0.8rem;">
+            <h3 style="font-size: 1rem; color: #fff;">Reference Algorithm Implementation</h3>
+            <span class="badge-tag">Python 3 / Fail-Closed</span>
+          </div>
+          <div class="code-viewer-container" style="max-height: 520px;">
+<span class="key">def</span> consent_guard(request):
+    <span class="string">"""
+    TrustMesh ConsentGuard: Evaluates Partner Identity,
+    Access Token, Customer Consent, Scopes, and Rate Limits.
+    """</span>
+    <span class="comment"># Step 1: Authenticate the partner</span>
+    <span class="key">if</span> <span class="key">not</span> authenticate_partner(request.partner_token):
+        <span class="key">return</span> deny(<span class="string">"INVALID_PARTNER_AUTHENTICATION"</span>)
+
+    <span class="comment"># Step 2: Validate the access token</span>
+    <span class="key">if</span> <span class="key">not</span> validate_token(request.access_token):
+        <span class="key">return</span> deny(<span class="string">"INVALID_OR_EXPIRED_TOKEN"</span>)
+
+    <span class="comment"># Step 3: Check customer consent</span>
+    consent = get_customer_consent(
+        request.customer_id,
+        request.partner_id
+    )
+
+    <span class="key">if</span> consent <span class="key">is</span> <span class="null">None</span> <span class="key">or</span> <span class="key">not</span> consent.is_active:
+        <span class="key">return</span> deny(<span class="string">"CONSENT_MISSING_OR_REVOKED"</span>)
+
+    <span class="comment"># Step 4: Check requested permission and data scope</span>
+    <span class="key">if</span> <span class="key">not</span> request.scope.issubset(consent.allowed_scopes):
+        <span class="key">return</span> deny(<span class="string">"INSUFFICIENT_PERMISSION"</span>)
+
+    <span class="comment"># Step 5: Check purpose and consent expiry</span>
+    <span class="key">if</span> consent.is_expired <span class="key">or</span> <span class="key">not</span> purpose_is_allowed(
+        request.purpose, consent
+    ):
+        <span class="key">return</span> deny(<span class="string">"CONSENT_EXPIRED_OR_PURPOSE_MISMATCH"</span>)
+
+    <span class="comment"># Step 6: Apply API security policies & rate limits</span>
+    <span class="key">if</span> <span class="key">not</span> rate_limit_ok(request.partner_id):
+        <span class="key">return</span> deny(<span class="string">"RATE_LIMIT_EXCEEDED"</span>)
+
+    <span class="comment"># Step 7: Forward only the permitted request</span>
+    response = call_banking_api(request)
+    <span class="key">return</span> allow(response)
+          </div>
+        </div>
+
+        <!-- Failure Modes & Defense Rules Card -->
+        <div class="glass-panel">
+          <div class="section-header" style="margin-bottom: 0.8rem;">
+            <h3 style="font-size: 1rem; color: #fff;">Reason Codes &amp; Security Enforcements</h3>
+            <span class="badge-tag">Zero Information Leakage</span>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); padding: 0.85rem; border-radius: var(--radius-sm);">
+              <div class="flex-between">
+                <strong class="mono-col text-rose">INVALID_PARTNER_AUTHENTICATION</strong>
+                <span class="status-badge fail">HTTP 401</span>
+              </div>
+              <p style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.3rem;">
+                Triggered if mTLS identity certificate or partner API token fails cryptographic validation. Prevents unauthorized third parties from probing banking endpoints.
+              </p>
+            </div>
+
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); padding: 0.85rem; border-radius: var(--radius-sm);">
+              <div class="flex-between">
+                <strong class="mono-col text-rose">CONSENT_MISSING_OR_REVOKED</strong>
+                <span class="status-badge fail">HTTP 403</span>
+              </div>
+              <p style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.3rem;">
+                Enforces the principle of customer data sovereignty. If a customer has revoked permission in their banking app, the request is immediately terminated before reaching Core Banking.
+              </p>
+            </div>
+
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); padding: 0.85rem; border-radius: var(--radius-sm);">
+              <div class="flex-between">
+                <strong class="mono-col text-rose">INSUFFICIENT_PERMISSION</strong>
+                <span class="status-badge fail">HTTP 403</span>
+              </div>
+              <p style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.3rem;">
+                Account-boundary and operation-boundary enforcement. If customer granted access only to Account A balance, an inquiry for Account B or transactions is strictly blocked.
+              </p>
+            </div>
+
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); padding: 0.85rem; border-radius: var(--radius-sm);">
+              <div class="flex-between">
+                <strong class="mono-col text-rose">CONSENT_EXPIRED_OR_PURPOSE_MISMATCH</strong>
+                <span class="status-badge fail">HTTP 403</span>
+              </div>
+              <p style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.3rem;">
+                Consent agreements must have strict validity windows (e.g. 90 days) and purpose binding (e.g. <code>LOAN_UNDERWRITING</code> vs. unapproved marketing usage).
+              </p>
+            </div>
+
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); padding: 0.85rem; border-radius: var(--radius-sm);">
+              <div class="flex-between">
+                <strong class="mono-col text-rose">RATE_LIMIT_EXCEEDED</strong>
+                <span class="status-badge fail">HTTP 429</span>
+              </div>
+              <p style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.3rem;">
+                Prevents data scraping or Denial of Service attacks on core banking ledgers through token-bucket rate limiting per partner tier.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         TAB 4: CUSTOMER CONSENT VAULT
+         ==================================================================== -->
+    <section class="tab-section" id="tab-consents">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <h2>Customer Consent Management Vault</h2>
+          <p>Active consent contracts granted by bank customers, with real-time revocation and scope controls.</p>
+        </div>
+        <button class="btn-primary" onclick="openGrantConsentModal()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Grant New Consent
+        </button>
+      </div>
+
+      <div class="glass-panel">
+        <div class="audit-table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Consent ID</th>
+                <th>Authorized Partner</th>
+                <th>Permitted Accounts</th>
+                <th>Permitted Scopes</th>
+                <th>Purpose Binding</th>
+                <th>Expiry Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="consents-table-body">
+              <!-- Dynamically rendered -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         TAB 5: FINTECH PARTNER REGISTRY
+         ==================================================================== -->
+    <section class="tab-section" id="tab-partners">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <h2>Registered Fintech Partners Directory</h2>
+          <p>Onboarded third-party applications authorized to participate in the Open Banking mesh.</p>
+        </div>
+        <button class="btn-secondary" id="btn-register-partner">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Register New Fintech
+        </button>
+      </div>
+
+      <div class="grid-3col" id="partners-grid-container">
+        <!-- Dynamically rendered partner cards -->
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         TAB 6: AUDIT LEDGER & MONITORING
+         ==================================================================== -->
+    <section class="tab-section" id="tab-audit">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <h2>Tamper-Evident Cryptographic Audit Trail</h2>
+          <p>Every security decision is permanently chained with SHA-256 block hashing without leaking sensitive banking data.</p>
+        </div>
+        <div style="display: flex; gap: 0.5rem;">
+          <button class="btn-secondary" id="btn-clear-audit">Clear View</button>
+        </div>
+      </div>
+
+      <!-- Telemetry Stat Counters -->
+      <div class="impact-metric-cards" style="margin-bottom: 1.5rem;">
+        <div class="metric-card info">
+          <div class="metric-val" id="audit-stat-total">0</div>
+          <div class="metric-lbl">Total Evaluated Requests</div>
+        </div>
+        <div class="metric-card success">
+          <div class="metric-val" id="audit-stat-allow-rate">100%</div>
+          <div class="metric-lbl">Authorization Rate</div>
+        </div>
+        <div class="metric-card danger">
+          <div class="metric-val" id="audit-stat-denied">0</div>
+          <div class="metric-lbl">Blocked Violations</div>
+        </div>
+        <div class="metric-card" style="border-color: rgba(6, 182, 212, 0.4);">
+          <div class="metric-val text-cyan">SHA-256</div>
+          <div class="metric-lbl">Ledger Integrity</div>
+        </div>
+      </div>
+
+      <div class="glass-panel">
+        <div class="audit-table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Block #</th>
+                <th>Timestamp (UTC)</th>
+                <th>Partner</th>
+                <th>Account</th>
+                <th>Operation</th>
+                <th>Decision</th>
+                <th>Reason Code</th>
+                <th>Block Hash</th>
+              </tr>
+            </thead>
+            <tbody id="audit-table-body">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         TAB 7: TECHNICAL ARCHITECTURE & WORKFLOW VISUALIZER
+         ==================================================================== -->
+    <section class="tab-section" id="tab-architecture">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <h2>Technical Architecture &amp; System Modules</h2>
+          <p>End-to-end integration topology between Third-Party Apps, Gateway, TrustMesh Guard, and Core Banking.</p>
+        </div>
+      </div>
+
+      <div class="architecture-container">
+        <div class="flow-diagram-grid" id="architecture-flow-wrapper">
+          <!-- Node 1 -->
+          <div class="flow-node">
+            <div class="flow-node-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+            </div>
+            <h5>Third-Party Client</h5>
+            <p>Fintech App, Lending App, Wealth Manager</p>
+          </div>
+
+          <div class="flow-connector">➔</div>
+
+          <!-- Node 2 -->
+          <div class="flow-node">
+            <div class="flow-node-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            </div>
+            <h5>API Gateway</h5>
+            <p>HTTPS, Token Validation, Rate Limits</p>
+          </div>
+
+          <div class="flow-connector">➔</div>
+
+          <!-- Node 3 (Core) -->
+          <div class="flow-node highlight">
+            <div class="flow-node-icon" style="color: var(--accent-cyan);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <h5>TrustMesh ConsentGuard</h5>
+            <p>Partner Auth + Consent + Scope + Purpose</p>
+          </div>
+
+          <div class="flow-connector">➔</div>
+
+          <!-- Node 4 -->
+          <div class="flow-node">
+            <div class="flow-node-icon" style="color: var(--status-allow);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <h5>Core Banking API</h5>
+            <p>Returns only authorized, filtered banking data</p>
+          </div>
+        </div>
+
+        <div style="margin-top: 2rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+          <div class="glass-panel" style="padding: 1rem;">
+            <strong style="color: var(--accent-cyan); font-size: 0.85rem;">Supporting Security Services</strong>
+            <p style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.35rem;">
+              • Consent Database (Decentralized Consent Ledger)<br>
+              • Partner Trust Registry &amp; mTLS Key Vault<br>
+              • Cryptographic Audit Trail (SHA-256 chained)
+            </p>
+          </div>
+          <div class="glass-panel" style="padding: 1rem;">
+            <strong style="color: var(--status-allow); font-size: 0.85rem;">Fail-Closed Security Guarantee</strong>
+            <p style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.35rem;">
+              • Any failed check halts execution immediately<br>
+              • No banking records or account balances exposed on error<br>
+              • Safe generic reason codes with incident reference IDs
+            </p>
+          </div>
+          <div class="glass-panel" style="padding: 1rem;">
+            <strong style="color: var(--accent-purple); font-size: 0.85rem;">API Change-Impact Engine</strong>
+            <p style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.35rem;">
+              • Detects API schema &amp; scope drift before release<br>
+              • Maps impacts across registered partner contracts<br>
+              • Automated backwards-compatible aliasing
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ====================================================================
+       MODAL: GRANT NEW CUSTOMER CONSENT
+       ==================================================================== -->
+  <div class="modal-overlay" id="consent-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Grant Customer Consent Agreement</h3>
+        <button class="btn-close" id="modal-close-btn">&times;</button>
+      </div>
+
+      <form id="grant-consent-form">
+        <div class="form-group">
+          <label for="modal-partner-select">Select Authorized Fintech Partner</label>
+          <select class="form-control" id="modal-partner-select" required>
+            <option value="PARTNER-LENDKART">LendKart Pro Fintech (Lending)</option>
+            <option value="PARTNER-FINPULSE">FinPulse Personal Wealth (PPU)</option>
+            <option value="PARTNER-WEALTHGENIE">WealthGenie RoboAdvisor (Investment)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Accounts to Authorize</label>
+          <label class="checkbox-item">
+            <input type="checkbox" id="modal-acc-a" checked>
+            <span>Account A — ₹40,000 (Savings <code>ACC-IND-4001</code>)</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" id="modal-acc-b">
+            <span>Account B — ₹30,000 (Current <code>ACC-IND-3002</code>)</span>
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label>Permitted Operation Scopes</label>
+          <label class="checkbox-item">
+            <input type="checkbox" id="modal-scope-bal" checked>
+            <span>Read Account Balance (<code>read:balance</code>)</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" id="modal-scope-txn">
+            <span>Read Recent Transactions (<code>read:transactions</code>)</span>
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label for="modal-purpose-input">Authorized Purpose Binding</label>
+          <input type="text" class="form-control" id="modal-purpose-input" value="LOAN_UNDERWRITING" required>
+        </div>
+
+        <div class="form-group">
+          <label for="modal-duration-input">Consent Duration (Days)</label>
+          <input type="number" class="form-control" id="modal-duration-input" value="90" min="1" max="180" required>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.8rem; margin-top: 1.5rem;">
+          <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn-primary">Issue Signed Consent</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
